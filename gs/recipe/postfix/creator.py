@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import os
-import sys
 
 
 class ConfigurationCreator(object):
     automagic = 'groupserver-automagic'
+
     def __init__(self):
         pass
 
@@ -12,22 +12,22 @@ class ConfigurationCreator(object):
         if not(os.path.isdir(configFolder)):
             os.mkdir(configFolder, 0755)
         assert os.path.isdir(configFolder), \
-            '{} does not exist'.format(configFolder)
+            '{0} does not exist'.format(configFolder)
 
     def create_alias(self, smtp2gs, site, configFolder):
-        outFileName = '{}/groupserver.aliases'.format(configFolder)
-        m = '# Postfix aliases, created by GroupServer.\n# See aliases(5) for '\
-            'more information on this file. For more\n# GroupServer options '\
-            'see\n#    {smtp2gs} --help\n'
+        outFileName = '{0}/groupserver.aliases'.format(configFolder)
+        m = '# Postfix aliases, created by GroupServer.\n# See aliases(5) '\
+            'for more information on this file. For more\n# GroupServer '\
+            'options see\n#    {smtp2gs} --help\n'
         alias = '{automagic}:  "|{smtp2gs} http://{site}"\n'
-        outText = (m + alias).format(automagic=self.automagic, smtp2gs=smtp2gs, 
-                                     site=site)
+        outText = (m + alias).format(automagic=self.automagic,
+                                        smtp2gs=smtp2gs, site=site)
         with file(outFileName, 'w') as outFile:
             outFile.write(outText)
         return outFileName
-    
+
     def create_virtual(self, site, configFolder):
-        outFileName = '{}/groupserver.virtual'.format(configFolder)
+        outFileName = '{0}/groupserver.virtual'.format(configFolder)
         m = '# Postfix virtual host setup, created by GroupServer.\n# See '\
             'virtual(5) for more information on the file format.\n'
         virtual = '{site}  virtual\n@{site}  {automagic}\n'

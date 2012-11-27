@@ -50,14 +50,16 @@ to run it again set the run-once option to false or delete
                     self.options['site'],
                     configFolder)
             except OSError, e:
-                m = '%s: Failed to run\n\t%s\n%s\n' % (self.name, command, e)
-                sys.stderr.write(m)
+                m = '{name}: Failed to create example Postfix configuration :'\
+                    'in "{dir}":\n{error}\n'
+                sys.stderr.write(m.format(name=self.name, dir=d, error=e))
                 sys.exit(1)
             else:
                 self.mark_locked()
-                sys.stdout.write('\nExample Postfix configuration written to\n')
+                m = '\nExample Postfix configuration written to\n'
+                sys.stdout.write(m)
                 for fileName in writtenFiles:
-                    sys.stdout.write('{}\n'.format(fileName))
+                    sys.stdout.write('{0}\n'.format(fileName))
                 sys.stdout.write('\n')
         return tuple()
 
