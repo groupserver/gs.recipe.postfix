@@ -12,9 +12,6 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""
-This module contains the tool of gs.recipe.setupgs
-"""
 import codecs
 import os
 from setuptools import setup, find_packages
@@ -27,7 +24,7 @@ with codecs.open('README.txt', encoding='utf-8') as f:
 with codecs.open(os.path.join("docs", "HISTORY.txt"), encoding='utf-8') as f:
     long_description += '\n' + f.read()
 
-entry_point = 'gs.recipe.postfix:Recipe'
+entry_point = 'gs.recipe.postfix:PostfixConfigRecipe'
 entry_points = {"zc.buildout": ["default = %s" % entry_point]}
 
 setup(name='gs.recipe.postfix',

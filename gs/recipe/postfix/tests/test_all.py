@@ -15,7 +15,8 @@
 from __future__ import absolute_import, unicode_literals
 from unittest import TestSuite, main as unittest_main
 from gs.recipe.postfix.tests.creator import TestCreator
-testCases = (TestCreator, )
+from gs.recipe.postfix.tests.recipe import TestRecipe
+testCases = (TestCreator, TestRecipe, )
 
 
 def load_tests(loader, tests, pattern):
