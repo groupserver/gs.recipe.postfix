@@ -16,9 +16,9 @@ from __future__ import absolute_import, unicode_literals
 from mock import MagicMock
 import os
 from shutil import rmtree
-import sys
 from tempfile import mkdtemp
 from unittest import TestCase
+from zc.buildout import UserError
 import gs.recipe.postfix.recipe
 from gs.recipe.postfix.recipe import PostfixConfigRecipe
 UTF8 = 'utf-8'
@@ -55,8 +55,23 @@ class TestRecipe(TestCase):
 
         gs.recipe.postfix.recipe.ConfigurationCreator.create = MagicMock()
         self.recipe.install()
+
         c = gs.recipe.postfix.recipe.ConfigurationCreator.create.call_count
+        self.assertEqual(1, c)
+        c = gs.recipe.postfix.recipe.sys.stdout.write.call_count
         self.assertEqual(1, c)
 
         r = self.recipe.should_run()
         self.assertFalse(r)
+
+    def test_install_oserror(self):
+        'Test that ``install`` hitting an ``OSError`` raises a UserError'
+        r = self.recipe.should_run()
+        self.assertTrue(r)
+
+        gs.recipe.postfix.recipe.ConfigurationCreator.create = \
+            MagicMock(side_effect=OSError)
+        self.assertRaises(UserError, self.recipe.install)
+
+        r = self.recipe.should_run()
+        self.assertTrue(r)  # Should not be locked after the raise

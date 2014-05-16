@@ -39,7 +39,7 @@ class PostfixConfigRecipe(Recipe):
                 m = '{0}: Failed to create example Postfix configuration :'\
                     'in "{1}":\n{2}'
                 msg = m.format(self.name, d, e)
-                UserError(msg)
+                raise UserError(msg)
             else:
                 self.mark_locked()
                 fns = '\n    '.join(writtenFiles)
