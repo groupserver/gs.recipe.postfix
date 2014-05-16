@@ -21,7 +21,7 @@ UTF8 = 'utf-8'
 class ConfigurationCreator(object):
     'Create the configuration for Postfix'
 
-    AUTOMAGIC = 'groupserver-automagic@localhost'
+    AUTOMAGIC = 'groupserver-automagic'
     ALIAS = 'groupserver.aliases'
     VIRTUAL = 'groupserver.virtual'
 
@@ -40,9 +40,12 @@ class ConfigurationCreator(object):
 :rtype: ``str``
 '''
         outFileName = os.path.join(configFolder, self.ALIAS)
-        m = '# Postfix aliases, created by GroupServer.\n# See aliases(5) '\
-            'for more information on this file. For more\n# GroupServer '\
-            'options see\n#    {smtp2gs} --help\n'
+        m = '''# Postfix aliases, created by GroupServer.
+# See aliases(5) for more information on this file. For more GroupServer
+#     options see
+#         {smtp2gs} --help
+# Based on an example from VIRUAL_README
+#     <http://www.postfix.org/VIRTUAL_README.html#mailing_lists>\n\n'''
         alias = '{automagic}:  "|{smtp2gs} http://{site}"\n'
         outText = (m + alias).format(automagic=self.AUTOMAGIC,
                                         smtp2gs=smtp2gs, site=site)
@@ -61,7 +64,7 @@ class ConfigurationCreator(object):
         outFileName = os.path.join(configFolder, self.VIRTUAL)
         m = '# Postfix virtual host setup, created by GroupServer.\n# See '\
             'virtual(5) for more information on the file format.\n'
-        virtual = '{site}  virtual\n@{site}  {automagic}\n'
+        virtual = '{site}  virtual\n@{site}  {automagic}@localhost\n'
         outText = m + virtual.format(site=site, automagic=self.AUTOMAGIC)
         with codecs.open(outFileName, mode='w', encoding=UTF8) as outFile:
             outFile.write(outText)

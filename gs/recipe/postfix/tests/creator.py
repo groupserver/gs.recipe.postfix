@@ -53,17 +53,18 @@ class TestCreator(TestCase):
         r = self.creator.create_alias('smtp2gs', 'groups.example.com',
                                         self.tempDir)
         self.file_test(r)
-        self.file_content_test(r, ('smtp2gs', 'groups.example.com'))
+        self.file_content_test(r, ('smtp2gs', 'groups.example.com',
+                                    self.creator.AUTOMAGIC))
 
     def test_create_virtual(self):
         'Test the creation of the virtual file'
         r = self.creator.create_virtual('groups.example.com',
                                         self.tempDir)
         self.file_test(r)
-        # The "@localhost" is a rough check for a mapping issue
+        # The "@localhost" is a check for a mapping issue
         # <http://groupserver.org/r/post/3mqbXmGwp6CqQWBkCjPXQI>
-        self.file_content_test(r, ('groups.example.com', self.creator.AUTOMAGIC,
-                                    '@localhost'))
+        localAutomagic = self.creator.AUTOMAGIC + '@localhost'
+        self.file_content_test(r, ('groups.example.com', localAutomagic))
 
     def test_create(self):
         'Test the create method.'
