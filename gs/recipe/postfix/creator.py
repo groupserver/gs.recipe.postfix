@@ -31,7 +31,14 @@ class ConfigurationCreator(object):
             os.mkdir(configFolder, 0o755)
 
     def create_alias(self, smtp2gs, site, configFolder):
-        'Create the alias file'
+        '''Create the alias file
+
+:param str smtp2gs: The full path to the smtp2gs executable.
+:param str site: The URL to the GroupServer site.
+:param str configFolder: The path to the folder to write the alias file to.
+:returns: The path to the newly created configuration file.
+:rtype: ``str``
+'''
         outFileName = os.path.join(configFolder, self.ALIAS)
         m = '# Postfix aliases, created by GroupServer.\n# See aliases(5) '\
             'for more information on this file. For more\n# GroupServer '\
@@ -44,7 +51,13 @@ class ConfigurationCreator(object):
         return outFileName
 
     def create_virtual(self, site, configFolder):
-        'Create the virtual file'
+        '''Create the virtual file
+
+:param str site: The URL to the GroupServer site.
+:param str configFolder: The path to the folder to write the alias file to.
+:returns: The path to the newly created configuration file.
+:rtype: ``str``
+'''
         outFileName = os.path.join(configFolder, self.VIRTUAL)
         m = '# Postfix virtual host setup, created by GroupServer.\n# See '\
             'virtual(5) for more information on the file format.\n'
