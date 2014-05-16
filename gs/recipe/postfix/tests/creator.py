@@ -23,7 +23,7 @@ UTF8 = 'utf-8'
 
 
 class TestCreator(TestCase):
-    'Test the creation of the script.'
+    'Test the creation of the configuration files.'
 
     def setUp(self):
         self.creator = ConfigurationCreator()
@@ -60,7 +60,10 @@ class TestCreator(TestCase):
         r = self.creator.create_virtual('groups.example.com',
                                         self.tempDir)
         self.file_test(r)
-        self.file_content_test(r, ('groups.example.com', ))
+        # The "@localhost" is a rough check for a mapping issue
+        # <http://groupserver.org/r/post/3mqbXmGwp6CqQWBkCjPXQI>
+        self.file_content_test(r, ('groups.example.com', self.creator.AUTOMAGIC,
+                                    '@localhost'))
 
     def test_create(self):
         'Test the create method.'

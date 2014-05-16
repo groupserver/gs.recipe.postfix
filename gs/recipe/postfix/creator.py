@@ -21,7 +21,7 @@ UTF8 = 'utf-8'
 class ConfigurationCreator(object):
     'Create the configuration for Postfix'
 
-    AUTOMAGIC = 'groupserver-automagic'
+    AUTOMAGIC = 'groupserver-automagic@localhost'
     ALIAS = 'groupserver.aliases'
     VIRTUAL = 'groupserver.virtual'
 
