@@ -25,6 +25,8 @@ UTF8 = 'utf-8'
 class TestCreator(TestCase):
     'Test the creation of the configuration files.'
 
+    DEFAULT_PORTS = ('80', '443')
+
     def setUp(self):
         self.creator = ConfigurationCreator()
         self.tempDir = mkdtemp()
@@ -37,11 +39,13 @@ class TestCreator(TestCase):
         self.assertIn(self.tempDir, filePath)
         self.assertTrue(os.path.isfile(filePath))
 
-    def file_content_test(self, filePath, contents=[]):
+    def file_content_test(self, filePath, contents=[], notContents=[]):
         with codecs.open(filePath, mode='r', encoding=UTF8) as inFile:
             data = inFile.read()
         for c in contents:
             self.assertIn(c, data)
+        for nc in notContents:
+            self.assertNotIn(nc, data)
 
     def test_create_config_folder(self):
         'Test the creation of the configuration folder'
@@ -49,12 +53,40 @@ class TestCreator(TestCase):
         self.assertTrue(os.path.isdir(self.folder))
 
     def test_create_alias(self):
-        'Test the creation of the alias-file'
+        'Test the creation of the alias-file when no port is given'
         r = self.creator.create_alias('smtp2gs', 'groups.example.com', '',
                                         self.tempDir)
         self.file_test(r)
         self.file_content_test(r, ('smtp2gs', 'groups.example.com',
-                                    self.creator.AUTOMAGIC))
+                                    self.creator.AUTOMAGIC),
+                                self.DEFAULT_PORTS)
+
+    def test_create_alias_port_http(self):
+        'Test the creation of the alias-file when port 80 is specified'
+        r = self.creator.create_alias('smtp2gs', 'groups.example.com', '80',
+                                        self.tempDir)
+        self.file_test(r)
+        self.file_content_test(r, ('smtp2gs', 'groups.example.com',
+                                    self.creator.AUTOMAGIC),
+                                self.DEFAULT_PORTS)
+
+    def test_create_alias_port_https(self):
+        'Test the creation of the alias-file when port 443 is specified'
+        r = self.creator.create_alias('smtp2gs', 'groups.example.com', '443',
+                                        self.tempDir)
+        self.file_test(r)
+        self.file_content_test(r, ('smtp2gs', 'groups.example.com',
+                                    self.creator.AUTOMAGIC),
+                                self.DEFAULT_PORTS)
+
+    def test_create_alias_port_other(self):
+        'Test the creation of the alias-file when a non-standard port is given'
+        r = self.creator.create_alias('smtp2gs', 'groups.example.com', '90210',
+                                        self.tempDir)
+        self.file_test(r)
+        self.file_content_test(r, ('smtp2gs', 'groups.example.com', '90210',
+                                    self.creator.AUTOMAGIC),
+                                self.DEFAULT_PORTS)
 
     def test_create_virtual(self):
         'Test the creation of the virtual file'
