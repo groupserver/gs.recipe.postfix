@@ -7,7 +7,7 @@ A ``zc.buildout`` recipe the Postfix configuration for GroupServer
 
 :Author: `Michael JasonSmith`_
 :Contact: Michael JasonSmith <mpj17@onlinegroups.net>
-:Date: 2014-05-16
+:Date: 2014-05-20
 :Organization: `GroupServer.org`_
 :Copyright: This document is licensed under a
   `Creative Commons Attribution-Share Alike 4.0 International License`_
@@ -31,6 +31,9 @@ other ``zc.buildout`` recipes::
   smtp2gs_path = ${buildout:directory}/bin/smtp2gs
   site = ${config:host}
 
+Parameters
+----------
+
 Two values must be provided to the recipe.
 
 ``smtp2gs_path``:
@@ -39,8 +42,17 @@ Two values must be provided to the recipe.
 ``site``:
   The host-name of the GroupServer site.
 
-TODO: 
-  Port
+To parameters are **optional.**
+
+``port``: 
+  The default port that the GroupServer site is running on. If
+  omitted (the default) the standard port will be used
+  [#standard]_.
+
+``use_ssl``:
+  If set to ``false``, ``no``, or ``off`` (the default) then
+  ``smtp2gs`` will use HTTP to communicate with the server. If
+  set to any other value then HTTPS (TLS) will be used.
 
 When the recipe is run it will create a directory
 ``postfix_config`` within the GroupServer installation
@@ -70,6 +82,10 @@ Resources
               <http://www.postfix.org/aliases.5.html>`_
 .. [#smtp2gs] See 
         <https://source.iopen.net/groupserver/gs.group.messages.add.smtp2gs>
+.. [#standard] The definition of what constitutes a *standard*
+               port is left to a combination of the ``smtp2gs``,
+               ``gs.form`` and the standard Python ``http``
+               module.
 .. _Postfix: http://www.postfix.org/
 .. _GroupServer: http://groupserver.org/
 .. _GroupServer.org: http://groupserver.org/
@@ -77,3 +93,5 @@ Resources
 .. _Michael JasonSmith: http://groupserver.org/p/mpj17
 ..  _Creative Commons Attribution-Share Alike 4.0 International License:
     http://creativecommons.org/licenses/by-sa/4.0/
+
+..  LocalWords:  TLS groupserver html www smtp ssl postfix
