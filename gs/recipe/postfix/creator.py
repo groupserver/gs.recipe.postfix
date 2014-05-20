@@ -39,18 +39,20 @@ class ConfigurationCreator(object):
         if not(os.path.isdir(configFolder)):
             os.mkdir(configFolder, 0o755)
 
-    def create_alias(self, smtp2gs, site, port, configFolder):
+    def create_alias(self, smtp2gs, site, port, usessl, configFolder):
         '''Create the alias file
 
 :param str smtp2gs: The full path to the smtp2gs executable.
 :param str site: The URL to the GroupServer site.
 :param str port: The port that the GroupServer site is running on.
+:param bool usessl: ``True`` if TLS should be used.
 :param str configFolder: The path to the folder to write the alias file to.
 :return: The path to the newly created configuration file.
 :rtype: ``str``
 
-This method creates an alias-file that can be used by Postfix. See
-:manpage:`aliases(5)`.
+This method creates an alias-file that can be used by Postfix.
+
+.. seealso:: The :manpage:`aliases(5)` manual page.
 '''
         outFileName = os.path.join(configFolder, self.ALIAS)
         m = '''# Postfix aliases, created by GroupServer.
@@ -59,11 +61,13 @@ This method creates an alias-file that can be used by Postfix. See
 #         {smtp2gs} --help
 # Based on an example from VIRUAL_README
 #     <http://www.postfix.org/VIRTUAL_README.html#mailing_lists>\n\n'''
+        h = 'https' if usessl else 'http'
         # Format the port. Ignore if blank or the default for HTTP(S).
         p = ':%s' % port if (port and (port not in ('80', '443'))) else ''
-        alias = '{automagic}:  "|{smtp2gs} http://{site}{port}"\n'
-        outText = (m + alias).format(automagic=self.AUTOMAGIC,
-                                        smtp2gs=smtp2gs, site=site, port=p)
+        alias = '{automagic}:  "|{smtp2gs} {http}://{site}{port}"\n'
+        o = m + alias
+        outText = o.format(automagic=self.AUTOMAGIC, smtp2gs=smtp2gs, http=h,
+                            site=site, port=p)
         with codecs.open(outFileName, mode='w', encoding=UTF8) as outFile:
             outFile.write(outText)
         return outFileName
@@ -76,8 +80,9 @@ This method creates an alias-file that can be used by Postfix. See
 :return: The path to the newly created configuration file.
 :rtype: ``str``
 
-This method creates an alias-file that can be used by Postfix. See
-:manpage:`virtual(5)`.
+This method creates an alias-file that can be used by Postfix.
+
+.. seealso:: The :manpage:`virtual(5)` manual page.
 '''
         outFileName = os.path.join(configFolder, self.VIRTUAL)
         m = '# Postfix virtual host setup, created by GroupServer.\n# See '\
@@ -88,18 +93,19 @@ This method creates an alias-file that can be used by Postfix. See
             outFile.write(outText)
         return outFileName
 
-    def create(self, stmp2gs, site, port, configFolder):
+    def create(self, stmp2gs, site, port, usessl, configFolder):
         '''Create the alias and virtual files
 
 :param str smtp2gs: The full path to the smtp2gs executable.
 :param str site: The URL to the GroupServer site.
 :param str port: The port that the GroupServer site is running on.
+:param bool usessl: ``True`` if TLS should be used.
 :param str configFolder: The path to the folder to write the alias file to.
 :return: The paths to the newly created configuration files, as a two-member
          list: ``[alias, virtual]``
 :rtype: ``list``
 '''
         self.create_config_folder(configFolder)
-        f1 = self.create_alias(stmp2gs, site, port, configFolder)
+        f1 = self.create_alias(stmp2gs, site, port, usessl, configFolder)
         f2 = self.create_virtual(site, configFolder)
         return [f1, f2]

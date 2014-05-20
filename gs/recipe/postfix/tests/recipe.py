@@ -39,6 +39,7 @@ class TestRecipe(TestCase):
         self.options['smtp2gs_path'] = os.path.join(self.tempdir, 'smtp2gs')
         self.options['site'] = 'groups.example.com'
         self.options['recipe'] = 'gs.recipe.postfix'
+        # FIXME: port, usessl
         self.recipe = PostfixConfigRecipe(self.buildout, self.name,
                                             self.options)
 

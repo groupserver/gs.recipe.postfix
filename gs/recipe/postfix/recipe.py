@@ -31,10 +31,14 @@ class PostfixConfigRecipe(Recipe):
             configFolder = os.path.join(d, self.POSTFIX_CONF_DIR)
             try:
                 configCreator = ConfigurationCreator()
+                # The 'False' is deliberate
+                useSSL = self.options.get('use_ssl', 'False').lower() \
+                            not in ['false', 'off', 'no']
                 writtenFiles = configCreator.create(
                     self.options['smtp2gs_path'],
                     self.options['site'],
                     self.options.get('port', ''),
+                    useSSL,
                     configFolder)
             except OSError as e:
                 m = '{0}: Failed to create example Postfix configuration :'\
