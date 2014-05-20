@@ -25,10 +25,12 @@ class ConfigurationCreator(object):
     #: both the Alias and the Virtual file.
     AUTOMAGIC = 'groupserver-automagic'
 
-    #: The name of the Postfix Alias file that will be created.
+    #: The name of the Postfix Alias file that will be created. See
+    #: :manpage:`aliases(5)`.
     ALIAS = 'groupserver.aliases'
 
-    #: The name of the Postfix Virtual file that will be created.
+    #: The name of the Postfix Virtual file that will be created. See
+    #: :manpage:`virtual(5)`.
     VIRTUAL = 'groupserver.virtual'
 
     @staticmethod
@@ -44,8 +46,11 @@ class ConfigurationCreator(object):
 :param str site: The URL to the GroupServer site.
 :param str port: The port that the GroupServer site is running on.
 :param str configFolder: The path to the folder to write the alias file to.
-:returns: The path to the newly created configuration file.
+:return: The path to the newly created configuration file.
 :rtype: ``str``
+
+This method creates an alias-file that can be used by Postfix. See
+:manpage:`aliases(5)`.
 '''
         outFileName = os.path.join(configFolder, self.ALIAS)
         m = '''# Postfix aliases, created by GroupServer.
@@ -68,8 +73,11 @@ class ConfigurationCreator(object):
 
 :param str site: The URL to the GroupServer site.
 :param str configFolder: The path to the folder to write the alias file to.
-:returns: The path to the newly created configuration file.
+:return: The path to the newly created configuration file.
 :rtype: ``str``
+
+This method creates an alias-file that can be used by Postfix. See
+:manpage:`virtual(5)`.
 '''
         outFileName = os.path.join(configFolder, self.VIRTUAL)
         m = '# Postfix virtual host setup, created by GroupServer.\n# See '\
@@ -87,8 +95,8 @@ class ConfigurationCreator(object):
 :param str site: The URL to the GroupServer site.
 :param str port: The port that the GroupServer site is running on.
 :param str configFolder: The path to the folder to write the alias file to.
-:returns: The paths to the newly created configuration files, as a two-member
-          list: ``[alias, virtual]``
+:return: The paths to the newly created configuration files, as a two-member
+         list: ``[alias, virtual]``
 :rtype: ``list``
 '''
         self.create_config_folder(configFolder)
