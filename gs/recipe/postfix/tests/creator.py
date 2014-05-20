@@ -50,7 +50,7 @@ class TestCreator(TestCase):
 
     def test_create_alias(self):
         'Test the creation of the alias-file'
-        r = self.creator.create_alias('smtp2gs', 'groups.example.com',
+        r = self.creator.create_alias('smtp2gs', 'groups.example.com', '',
                                         self.tempDir)
         self.file_test(r)
         self.file_content_test(r, ('smtp2gs', 'groups.example.com',
@@ -68,7 +68,7 @@ class TestCreator(TestCase):
 
     def test_create(self):
         'Test the create method.'
-        r0, r1 = self.creator.create('smtp2gs', 'groups.example.com',
+        r0, r1 = self.creator.create('smtp2gs', 'groups.example.com', '',
                                             self.folder)
         self.file_test(r0)
         self.file_content_test(r0, ('smtp2gs', 'groups.example.com'))

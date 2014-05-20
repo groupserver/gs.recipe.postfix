@@ -21,20 +21,28 @@ UTF8 = 'utf-8'
 class ConfigurationCreator(object):
     'Create the configuration for Postfix'
 
+    #: The name of the Postfix rule that will be created, and referred to in
+    #: both the Alias and the Virtual file.
     AUTOMAGIC = 'groupserver-automagic'
+
+    #: The name of the Postfix Alias file that will be created.
     ALIAS = 'groupserver.aliases'
+
+    #: The name of the Postfix Virtual file that will be created.
     VIRTUAL = 'groupserver.virtual'
 
-    def create_config_folder(self, configFolder):
+    @staticmethod
+    def create_config_folder(configFolder):
         'Create the configuration folder'
         if not(os.path.isdir(configFolder)):
             os.mkdir(configFolder, 0o755)
 
-    def create_alias(self, smtp2gs, site, configFolder):
+    def create_alias(self, smtp2gs, site, port, configFolder):
         '''Create the alias file
 
 :param str smtp2gs: The full path to the smtp2gs executable.
 :param str site: The URL to the GroupServer site.
+:param str port: The port that the GroupServer site is running on.
 :param str configFolder: The path to the folder to write the alias file to.
 :returns: The path to the newly created configuration file.
 :rtype: ``str``
@@ -46,9 +54,11 @@ class ConfigurationCreator(object):
 #         {smtp2gs} --help
 # Based on an example from VIRUAL_README
 #     <http://www.postfix.org/VIRTUAL_README.html#mailing_lists>\n\n'''
-        alias = '{automagic}:  "|{smtp2gs} http://{site}"\n'
+        # Format the port. Ignore if blank or the default for HTTP(S).
+        p = ':%s' % port if (port and (port not in ('80', '443'))) else ''
+        alias = '{automagic}:  "|{smtp2gs} http://{site}{port}"\n'
         outText = (m + alias).format(automagic=self.AUTOMAGIC,
-                                        smtp2gs=smtp2gs, site=site)
+                                        smtp2gs=smtp2gs, site=site, port=p)
         with codecs.open(outFileName, mode='w', encoding=UTF8) as outFile:
             outFile.write(outText)
         return outFileName
@@ -70,8 +80,18 @@ class ConfigurationCreator(object):
             outFile.write(outText)
         return outFileName
 
-    def create(self, stmp2gsPath, site, configFolder):
+    def create(self, stmp2gs, site, port, configFolder):
+        '''Create the alias and virtual files
+
+:param str smtp2gs: The full path to the smtp2gs executable.
+:param str site: The URL to the GroupServer site.
+:param str port: The port that the GroupServer site is running on.
+:param str configFolder: The path to the folder to write the alias file to.
+:returns: The paths to the newly created configuration files, as a two-member
+          list: ``[alias, virtual]``
+:rtype: ``list``
+'''
         self.create_config_folder(configFolder)
-        f1 = self.create_alias(stmp2gsPath, site, configFolder)
+        f1 = self.create_alias(stmp2gs, site, port, configFolder)
         f2 = self.create_virtual(site, configFolder)
         return [f1, f2]

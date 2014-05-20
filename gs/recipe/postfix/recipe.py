@@ -34,6 +34,7 @@ class PostfixConfigRecipe(Recipe):
                 writtenFiles = configCreator.create(
                     self.options['smtp2gs_path'],
                     self.options['site'],
+                    self.options.get('port', ''),
                     configFolder)
             except OSError as e:
                 m = '{0}: Failed to create example Postfix configuration :'\
