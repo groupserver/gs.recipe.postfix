@@ -1,0 +1,8 @@
+:mod:`gs.recipe.postfix` classes
+================================
+
+.. autoclass:: gs.recipe.postfix.creator.ConfigurationCreator
+   :members:
+
+.. autoclass:: gs.recipe.postfix.PostfixConfigRecipe
+   :members:

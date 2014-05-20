@@ -35,7 +35,13 @@ class ConfigurationCreator(object):
 
     @staticmethod
     def create_config_folder(configFolder):
-        'Create the configuration folder'
+        '''Create the configuration folder
+
+:param str configFolder: The folder to created.
+:return: ``None``
+
+Creates the directory to hold the configuration files, if it does not already
+exist.'''
         if not(os.path.isdir(configFolder)):
             os.mkdir(configFolder, 0o755)
 
@@ -104,6 +110,8 @@ This method creates an alias-file that can be used by Postfix.
 :return: The paths to the newly created configuration files, as a two-member
          list: ``[alias, virtual]``
 :rtype: ``list``
+
+This is the main entry-point to the creator.
 '''
         self.create_config_folder(configFolder)
         f1 = self.create_alias(stmp2gs, site, port, usessl, configFolder)
