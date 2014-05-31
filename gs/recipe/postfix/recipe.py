@@ -48,7 +48,7 @@ class PostfixConfigRecipe(Recipe):
             else:
                 self.mark_locked()
                 fns = '\n    '.join(writtenFiles)
-                m = '\nExample Postfix configuration written to    {0}\n'
+                m = '\nExample Postfix configuration written to\n    {0}\n'
                 msg = m.format(fns)
                 sys.stdout.write(msg)
         return tuple()
