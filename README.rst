@@ -7,7 +7,7 @@ A ``zc.buildout`` recipe the Postfix configuration for GroupServer
 
 :Author: `Michael JasonSmith`_
 :Contact: Michael JasonSmith <mpj17@onlinegroups.net>
-:Date: 2014-05-20
+:Date: 2014-10-22
 :Organization: `GroupServer.org`_
 :Copyright: This document is licensed under a
   `Creative Commons Attribution-Share Alike 4.0 International License`_
@@ -72,7 +72,7 @@ of the section in the configuration file.)
 Resources
 =========
 
-- Code repository: https://source.iopen.net/groupserver/gs.recipe.postfix
+- Code repository: https://github.com/groupserver/gs.recipe.postfix
 - Questions and comments to http://groupserver.org/groups/development
 - Report bugs at https://redmine.iopen.net/projects/groupserver
 
@@ -81,7 +81,7 @@ Resources
 .. [#aliases] See `the aliases(5) man page
               <http://www.postfix.org/aliases.5.html>`_
 .. [#smtp2gs] See 
-        <https://source.iopen.net/groupserver/gs.group.messages.add.smtp2gs>
+              <https://github.com/groupserver/gs.group.messages.add.smtp2gs>
 .. [#standard] The definition of what constitutes a *standard*
                port is left to a combination of the ``smtp2gs``,
                ``gs.form`` and the standard Python ``http``
