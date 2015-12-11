@@ -1,20 +1,28 @@
 Changelog
 =========
 
+2.0.1 (2015-12-11)
+------------------
+
+* Fixing how the unit-tests handle ``stdout``
+
 2.0.0 (2014-05-20)
 ------------------
 
-* Added the ``port`` and ``use_ssl`` options.
-* Added unit tests.
-* Refactor into multiple modules.
-* General Unicode and PEP-8 update.
+* Adding the ``port`` and ``use_ssl`` options
+* Adding unit tests
+* Refactoring into multiple modules
+* Switching to Unicode literals
+* Cleaning up the code (PEP-8)
 
 1.0.1 (2012-11-27)
 ------------------
 
-* Python 2.6 fixes for the format-strings.
+* Making Python 2.6 fixes for the format-strings
 
 1.0.0 (2012-10-25)
 ------------------
 
-* Initial release, forked off ``gs.recipe.setupgs``
+Initial release, forked off ``gs.recipe.setupgs``
+
+..  LocalWords:  Refactoring Changelog
