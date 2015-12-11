@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-# Copyright © 2014 OnlineGroups.net and Contributors.
+# Copyright © 2014, 2015 OnlineGroups.net and Contributors.
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -13,7 +13,7 @@
 #
 ##############################################################################
 from __future__ import absolute_import, unicode_literals
-from mock import MagicMock
+from mock import patch, MagicMock
 import os
 from shutil import rmtree
 from tempfile import mkdtemp
@@ -42,13 +42,11 @@ class TestRecipe(TestCase):
         self.recipe = PostfixConfigRecipe(self.buildout, self.name,
                                             self.options)
 
-        gs.recipe.postfix.recipe.sys.stdout = MagicMock()
-        gs.recipe.postfix.recipe.sys.stderr = MagicMock()
-
     def tearDown(self):
         rmtree(self.tempdir)
 
-    def test_install(self):
+    @patch('gs.recipe.postfix.recipe.sys.stdout')
+    def test_install(self, m_stdout):
         'Test a "normal" call of install'
         r = self.recipe.should_run()
         self.assertTrue(r)
@@ -63,7 +61,7 @@ class TestRecipe(TestCase):
         self.assertEqual('', args[2])
         self.assertFalse(args[3])  # use_ssl
 
-        c = gs.recipe.postfix.recipe.sys.stdout.write.call_count
+        c = m_stdout.write.call_count
         self.assertEqual(1, c)
 
         r = self.recipe.should_run()
@@ -73,7 +71,8 @@ class TestRecipe(TestCase):
         'Test an install with a port specified'
         gs.recipe.postfix.recipe.ConfigurationCreator.create = MagicMock()
         self.options['port'] = '90210'
-        self.recipe.install()
+        with patch('gs.recipe.postfix.recipe.sys.stdout'):
+            self.recipe.install()
 
         c = gs.recipe.postfix.recipe.ConfigurationCreator.create.call_count
         self.assertEqual(1, c)
@@ -86,7 +85,8 @@ class TestRecipe(TestCase):
         'Test an install with a use_ssl specified'
         gs.recipe.postfix.recipe.ConfigurationCreator.create = MagicMock()
         self.options['use_ssl'] = '90210'  # Anything not False is True.
-        self.recipe.install()
+        with patch('gs.recipe.postfix.recipe.sys.stdout'):
+            self.recipe.install()
 
         c = gs.recipe.postfix.recipe.ConfigurationCreator.create.call_count
         self.assertEqual(1, c)
@@ -99,7 +99,8 @@ class TestRecipe(TestCase):
         'Test an install with a use_ssl specified as false.'
         gs.recipe.postfix.recipe.ConfigurationCreator.create = MagicMock()
         self.options['use_ssl'] = 'off'
-        self.recipe.install()
+        with patch('gs.recipe.postfix.recipe.sys.stdout'):
+            self.recipe.install()
 
         c = gs.recipe.postfix.recipe.ConfigurationCreator.create.call_count
         self.assertEqual(1, c)
@@ -109,13 +110,15 @@ class TestRecipe(TestCase):
         self.assertFalse(args[3])  # use_ssl
 
         self.options['use_ssl'] = 'false'
-        self.recipe.install()
+        with patch('gs.recipe.postfix.recipe.sys.stdout'):
+            self.recipe.install()
         args, kwargs = \
             gs.recipe.postfix.recipe.ConfigurationCreator.create.call_args
         self.assertFalse(args[3])  # use_ssl
 
         self.options['use_ssl'] = 'no'
-        self.recipe.install()
+        with patch('gs.recipe.postfix.recipe.sys.stdout'):
+            self.recipe.install()
         args, kwargs = \
             gs.recipe.postfix.recipe.ConfigurationCreator.create.call_args
         self.assertFalse(args[3])  # use_ssl
@@ -125,7 +128,8 @@ class TestRecipe(TestCase):
         gs.recipe.postfix.recipe.ConfigurationCreator.create = MagicMock()
         self.options['use_ssl'] = 'Yes'  # Anything not False is True.
         self.options['port'] = '90210'
-        self.recipe.install()
+        with patch('gs.recipe.postfix.recipe.sys.stdout'):
+            self.recipe.install()
 
         c = gs.recipe.postfix.recipe.ConfigurationCreator.create.call_count
         self.assertEqual(1, c)
